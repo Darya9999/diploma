@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% block content %}
+    <div class="menu">
+        <a href="/statistic/">Добавить анкету</a>
+        <a href="/ankets/">Посмотреть анкеты</a>  
+        <a href="/stat/">Посмотреть статистику</a>
+    </div>
+
+	<div class="filtrs">
+		<div class="filters-item">
+			<span>Показать кандидатов с судимостью?</span>
+			<input type="checkbox" name="filtersud" id="filtersud" >
+		</div>
+		<div class="filters-item">
+			<span>Образование</span>
+			<select name="filterobr" id="filterobr">
+				<option value="nofilter">Не фильтровать</option>
+				<option value="no">Нет</option>
+				<option value="prof">Профильное</option>
+				<option value="neprof">Непрофильное</option>
+			</select>
+		</div>
+		<div class="filters-item">
+			<span>Показать кандидатов старше  60 лет?</span>
+			<select name="filterage" id="filterage">
+				<option value="yes">Да</option>
+				<option value="no">Нет</option>
+			</select>
+		</div>
+	</div>
+
+    <div class="ankets">
+        <div class="headAnkets">
+            <div class="elemHeadAnkets" style="flex: 0 0 50px;">ID</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 70px;">Имя</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 70px;">Фамилия</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 70px;">Отчество</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 80px;">Судимость</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 110px;">Образование</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 60px;">Возраст</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 80px;">Опыт работы</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 80px;">Опыт работы в компании-конкурент</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 100px;">Наличие рекомендаций с прошлого места работы</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 100px;">Наличие профильного доп. образования</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 70px;">Средний балл диплома</div>
+            <div class="elemHeadAnkets" style="flex: 0 0 80px;">Итоговое количество баллов</div>
+        </div>
+        {% for elem in anketaFields %} 
+            <div class="anketElem" data-id="{{ elem.id }}" data-sud="{{ elem.sud }}" data-obr="{{ elem.kind_obr }}" data-age="{{ elem.age }}" data-score="{{ elem.kollball }}" data-name="{{ elem.name }}" data-soname="{{ elem.sename }}">
+                <div class="itemAnketaElem" style="flex: 0 0 50px;">{{ elem.id }}</div>
+                <div class="itemAnketaElem elemname"  style="flex: 0 0 70px;">{{ elem.name }}</div>
+                <div class="itemAnketaElem elemsename"  style="flex: 0 0 70px;">{{ elem.sename }}</div>
+                <div class="itemAnketaElem elemsurname"  style="flex: 0 0 70px;">{{ elem.surname }}</div>
+                {% if elem.sud == True %}
+					<div class="itemAnketaElem elemsud"  style="flex: 0 0 80px;">Есть</div>
+                {% else %}
+					<div class="itemAnketaElem elemsud"  style="flex: 0 0 80px;">Нет</div>
+                {% endif %}
+                <div class="itemAnketaElem elemobr" style="flex: 0 0 110px;">{{ elem.get_kind_obr_display }}</div>
+                <div class="itemAnketaElem elemage" style="flex: 0 0 60px;">{{ elem.age }}</div>
+                <div class="itemAnketaElem elemexp" style="flex: 0 0 80px;">{{ elem.get_kind_exp_display }}</div>
+                {% if elem.exp_concurent == True %}
+					<div class="itemAnketaElem elemexpcon" style="flex: 0 0 80px;">Есть</div>
+                {% else %}
+					<div class="itemAnketaElem elemexpcon" style="flex: 0 0 80px;">Нет</div>
+                {% endif %}
+                
+                {% if elem.recomendacii == True %}
+					<div class="itemAnketaElem elemrec" style="flex: 0 0 100px;">Есть</div>
+                {% else %}
+					<div class="itemAnketaElem elemrec" style="flex: 0 0 100px;">Нет</div>
+                {% endif %}
+                
+                
+                {% if elem.profdop == True %}
+					<div class="itemAnketaElem elemprofdop" style="flex: 0 0 100px;">Есть</div>
+                {% else %}
+					<div class="itemAnketaElem elemprofdop" style="flex: 0 0 100px;">Нет</div>
+                {% endif %}     
+                
+                <div class="itemAnketaElem  elemsredball" style="flex: 0 0 70px;">{{ elem.sredball }}</div>
+                <div class="itemAnketaElem" style="flex: 0 0 80px;">{{ elem.kollball }}</div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="pencil" data-id="{{ elem.id }}">
+                    <g clip-path="url(#clip0_403_3434)">
+                    <path d="M22.94 1.05872C22.2602 0.379917 21.3387 -0.00134277 20.378 -0.00134277C19.4173 -0.00134277 18.4958 0.379917 17.816 1.05872L0 18.8747V23.9987H5.124L22.94 6.18272C23.6186 5.50274 23.9997 4.58135 23.9997 3.62072C23.9997 2.66009 23.6186 1.7387 22.94 1.05872ZM4.3 21.9987H2V19.6987L15.31 6.39872L17.61 8.69872L4.3 21.9987ZM21.526 4.76872L19.019 7.27572L16.724 4.97572L19.23 2.47272C19.535 2.16772 19.9487 1.99637 20.38 1.99637C20.8113 1.99637 21.225 2.16772 21.53 2.47272C21.835 2.77772 22.0063 3.19139 22.0063 3.62272C22.0063 4.05405 21.835 4.46772 21.53 4.77272L21.526 4.76872Z" fill="#374957"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_403_3434">
+                    <rect width="24" height="24" fill="white"/>
+                    </clipPath>
+                    </defs>
+                </svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="trash" data-id="{{ elem.id }}">
+                    <g clip-path="url(#clip0_403_3151)">
+                    <path d="M9.00015 14H15.0001C15.2654 14 15.5197 13.8947 15.7072 13.7071C15.8948 13.5196 16.0001 13.2652 16.0001 13C16.0001 12.7348 15.8948 12.4804 15.7072 12.2929C15.5197 12.1054 15.2654 12 15.0001 12H9.00015C8.73493 12 8.48058 12.1054 8.29305 12.2929C8.10551 12.4804 8.00015 12.7348 8.00015 13C8.00015 13.2652 8.10551 13.5196 8.29305 13.7071C8.48058 13.8947 8.73493 14 9.00015 14Z" fill="#374957"/>
+                    <path d="M19 0H5C3.67441 0.00158786 2.40356 0.528882 1.46622 1.46622C0.528882 2.40356 0.00158786 3.67441 0 5L0 6C0.000290807 6.42174 0.0895008 6.83868 0.261809 7.22362C0.434117 7.60856 0.685652 7.95284 1 8.234V19C1.00159 20.3256 1.52888 21.5964 2.46622 22.5338C3.40356 23.4711 4.67441 23.9984 6 24H18C19.3256 23.9984 20.5964 23.4711 21.5338 22.5338C22.4711 21.5964 22.9984 20.3256 23 19V8.234C23.3143 7.95284 23.5659 7.60856 23.7382 7.22362C23.9105 6.83868 23.9997 6.42174 24 6V5C23.9984 3.67441 23.4711 2.40356 22.5338 1.46622C21.5964 0.528882 20.3256 0.00158786 19 0V0ZM2 5C2 4.20435 2.31607 3.44129 2.87868 2.87868C3.44129 2.31607 4.20435 2 5 2H19C19.7956 2 20.5587 2.31607 21.1213 2.87868C21.6839 3.44129 22 4.20435 22 5V6C22 6.26522 21.8946 6.51957 21.7071 6.70711C21.5196 6.89464 21.2652 7 21 7H3C2.73478 7 2.48043 6.89464 2.29289 6.70711C2.10536 6.51957 2 6.26522 2 6V5ZM21 19C21 19.7956 20.6839 20.5587 20.1213 21.1213C19.5587 21.6839 18.7956 22 18 22H6C5.20435 22 4.44129 21.6839 3.87868 21.1213C3.31607 20.5587 3 19.7956 3 19V9H21V19Z" fill="#374957"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_403_3151">
+                    <rect width="24" height="24" fill="white"/>
+                    </clipPath>
+                    </defs>
+                </svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="ok"  data-id="{{ elem.id }}">
+                    <path d="M7.80018 20.5299C7.40631 20.5306 7.01617 20.4535 6.65218 20.303C6.28819 20.1525 5.95753 19.9315 5.67918 19.6529L0.0861816 14.0609L1.50018 12.6459L7.09318 18.2389C7.28071 18.4263 7.53502 18.5316 7.80018 18.5316C8.06535 18.5316 8.31965 18.4263 8.50718 18.2389L22.5002 4.24585L23.9142 5.65985L9.92118 19.6529C9.64283 19.9315 9.31217 20.1525 8.94818 20.303C8.58419 20.4535 8.19406 20.5306 7.80018 20.5299Z" fill="#374957"/>
+                    </svg>
+                    
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+<div class="bastcand"></div>
+
+<div class="deleteall">Удалить все</div>
+
+<style>
+
+.deleteall {
+    max-width: 1000px;
+    display: flex;
+    margin: 0 auto;
+    position: relative;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-top: 20px;
+    color: red;
+    cursor: pointer;
+}
+
+.bastcand{
+    max-width: 1000px;
+    display: flex;
+    margin: 0 auto;
+    position: relative;
+    justify-content: space-between;
+	font-weight: bold;
+	margin-top: 20px;	
+	color: green;
+}
+
+.filtrs {
+    max-width: 1000px;
+    display: flex;
+    margin: 0 auto;
+    position: relative;
+    justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.filters-item{
+	display: flex;
+    align-items: center;
+	gap:10px;
+}
+
+
+h1{
+    text-align: center;
+}
+.post-form{
+    margin: 0 auto;
+    max-width: 500px;
+}
+.menu{
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    position: relative;
+}
+.menu a{
+    text-decoration: none;
+    color: black;
+}
+.menu a:nth-child(1){
+    background-color: #d4b7ef;
+}
+.menu a:nth-child(2){
+    background-color: #eef3ae;
+}
+.menu a:nth-child(3){
+    background-color: #659bec;
+}
+.ankets{
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    position: relative;
+}
+.headAnkets{
+    display: flex;
+}
+.elemHeadAnkets{
+    flex: 0 0 75px;
+    text-align: center;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+.itemAnketaElem{
+    flex: 0 0 79px; 
+    box-sizing: border-box;
+	overflow: hidden;
+}
+.anketElem {
+    display: flex;
+    justify-content: left;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.pencil{
+    position: absolute;
+    right: -62px;
+    cursor: pointer;
+}
+.trash{
+    position: absolute;
+    right: -97px;
+    cursor: pointer;
+}
+.ok{
+    position: absolute;
+    right: -59px;
+    display: none;
+	cursor: pointer;
+}
+
+input[type="text"] {
+	padding: 0;
+    box-sizing: border-box;
+}
+
+</style>
+
+<script>
+    function otmena(){
+        window.location.href = '/statistic/';
+    }
+
+$(".trash").click(function(){
+    let curId = $(this).attr('data-id')
+    $.ajax({
+        url: '/ankets/delete/?idelem='+curId,        
+        method: 'get',            
+        dataType: 'html',          
+        success: function(data){  
+            console.log('удалилось'); 
+            $(".anketElem[data-id="+curId+"]").remove()
+        }
+    });
+});
+
+$(".pencil").click(function(){
+	$(this).hide();
+	$(".anketElem[data-id='" + $(this).attr('data-id') + "'] .ok").show();
+
+    let curId = $(this).attr('data-id');
+	transformForEdit( curId );
+
+});
+
+$(".ok").click(function(){
+	let curId = $(this).attr('data-id');
+	let sud = "false";
+	if ( $(".anketElem[data-id='" + curId + "'] .elemsud input").is(':checked') == true){
+		sud = "true";
+	};
+	let concurent = "false";
+	if ( $(".anketElem[data-id='" + curId + "'] .elemexpcon input").is(':checked') == true){
+		concurent = "true";
+	};
+	let recom = "false";
+	if ( $(".anketElem[data-id='" + curId + "'] .elemrec input").is(':checked') == true){
+		recom = "true";
+	};	
+	let profdop = "false";
+	if ( $(".anketElem[data-id='" + curId + "'] .elemprofdop input").is(':checked') == true){
+		profdop = "true";
+	};	
+	
+
+    $.ajax({
+        url: '/ankets/update/',
+		data: {
+			id: curId,
+			name: $(".anketElem[data-id='" + curId + "'] .elemname input").val() ,
+			sename: $(".anketElem[data-id='" + curId + "'] .elemsename input").val() ,
+			surname: $(".anketElem[data-id='" + curId + "'] .elemsurname input").val() ,
+			sud: sud ,
+			age: $(".anketElem[data-id='" + curId + "'] .elemage input").val() ,
+			obr: $(".anketElem[data-id='" + curId + "'] .elemobr select").val() ,
+			exp: $(".anketElem[data-id='" + curId + "'] .elemexp select").val() ,
+			concurent: concurent ,
+			recom: recom ,
+			profdop: profdop ,
+			sredball: $(".anketElem[data-id='" + curId + "'] .elemsredball input").val() ,
+		},
+        method: 'get',            
+        dataType: 'html',          
+        success: function(data){  
+            location.reload();
+        }
+    });
+});
+
+$(".deleteall").click(function(){
+    $.ajax({
+        url: '/ankets/deleteall/',
+        method: 'get',            
+        dataType: 'html',          
+        success: function(data){  
+            location.reload();
+        }
+    });
+});
+
+
+
+function transformForEdit( curId ) {
+	let oldval = $(".anketElem[data-id='" + curId + "'] .elemname").text();
+	$(".anketElem[data-id='" + curId + "'] .elemname").html(`
+		<input type="text" name="name" maxlength="50" required="" id="id_name" style="
+			width: 70px;
+		">
+	`);
+	$(".anketElem[data-id='" + curId + "'] .elemname input").val( oldval );
+
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemsename").text();
+	$(".anketElem[data-id='" + curId + "'] .elemsename").html(`
+	<input type="text" name="sename" maxlength="50" required="" id="id_sename" style="
+			width: 70px;
+		">
+	`);
+	$(".anketElem[data-id='" + curId + "'] .elemsename input").val( oldval );
+
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemsurname").text();	
+	$(".anketElem[data-id='" + curId + "'] .elemsurname").html(`
+	<input type="text" name="surname" maxlength="50" required="" id="id_surname" style="
+			width: 70px;
+		">
+	`);
+	$(".anketElem[data-id='" + curId + "'] .elemsurname input").val( oldval );
+
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemsud").text();
+	$(".anketElem[data-id='" + curId + "'] .elemsud").html(`
+	<input type="checkbox" name="sud" id="id_sud" style="
+			width: 60px;
+		">
+	`);
+	if ( oldval == "Есть") {
+		$(".anketElem[data-id='" + curId + "'] .elemsud input").click();
+	}
+	
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemobr").text();
+	$(".anketElem[data-id='" + curId + "'] .elemobr").html(`
+		<select name="kind_obr" id="id_kind_obr" style="width: 110px;">
+		<option value="no">Нет</option>
+
+		<option value="prof">Профильное</option>
+
+		<option value="neprof">Непрофильное</option>
+		</select>
+	`);
+	if ( oldval == "Профильное") {
+		$(".anketElem[data-id='" + curId + "'] .elemobr option[value='prof']").prop('selected', true);
+	}
+	if ( oldval == "Непрофильное") {
+		$(".anketElem[data-id='" + curId + "'] .elemobr option[value='neprof']").prop('selected', true);
+	}
+
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemage").text();
+	$(".anketElem[data-id='" + curId + "'] .elemage").html(`
+		<input type="number" name="age" required="" min="18" max="70" id="id_age" style="width: 60px; padding: 0; box-sizing: border-box;" >
+	`);
+	$(".anketElem[data-id='" + curId + "'] .elemage input").val( oldval );
+
+
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemexp").text();
+	$(".anketElem[data-id='" + curId + "'] .elemexp").html(`
+		<select name="kind_exp" id="id_kind_exp" style="width: 80px;">
+		<option value="no">Нет</option>
+
+		<option value="prof1to3">Профильный от 1 до 3 лет</option>
+
+		<option value="profup3">Профильный от 3 лет</option>
+
+		<option value="neprof">Непрофильный опыт работы</option>
+
+		</select>
+	`);
+	if ( oldval == "Профильный от 1 до 3 лет") {
+		$(".anketElem[data-id='" + curId + "'] .elemexp option[value='prof1to3']").prop('selected', true);
+	}
+	if ( oldval == "Профильный от 3 лет") {
+		$(".anketElem[data-id='" + curId + "'] .elemexp option[value='profup3']").prop('selected', true);
+	}
+	if ( oldval == "Непрофильный опыт работы") {
+		$(".anketElem[data-id='" + curId + "'] .elemexp option[value='neprof']").prop('selected', true);
+	}
+	
+
+
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemexpcon").text();
+	$(".anketElem[data-id='" + curId + "'] .elemexpcon").html(`
+		<input type="checkbox" name="exp_concurent" id="id_exp_concurent" style="width: 60px;">
+	`);
+	if ( oldval == "Есть") {
+		$(".anketElem[data-id='" + curId + "'] .elemexpcon input").click();
+	}
+
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemrec").text();
+	$(".anketElem[data-id='" + curId + "'] .elemrec").html(`
+	<input type="checkbox" name="recomendacii" id="id_recomendacii" style="width: 60px;">
+	`);
+	if ( oldval == "Есть") {
+		$(".anketElem[data-id='" + curId + "'] .elemrec input").click();
+	}
+
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemprofdop").text();
+	$(".anketElem[data-id='" + curId + "'] .elemprofdop").html(`
+	<input type="checkbox" name="profdop" id="id_profdop"  style="width: 60px;">
+	`);
+	if ( oldval == "Есть") {
+		$(".anketElem[data-id='" + curId + "'] .elemprofdop input").click();
+	}
+	
+	oldval = $(".anketElem[data-id='" + curId + "'] .elemsredball").text();
+	$(".anketElem[data-id='" + curId + "'] .elemsredball").html(`
+	<input type="number" name="sredball" required="" min="2" max="5" id="id_sredball" style="width: 70px; padding: 0; box-sizing: border-box;">
+	`);
+	$(".anketElem[data-id='" + curId + "'] .elemsredball input").val( oldval );
+	
+
+}
+
+var filters = {
+	sud: "no",
+	obr: "nofilter",
+	age: "yes",
+};
+function activateFilters(){
+	let optimal = {
+		score: -100,
+		name: "",
+		soname: "",
+	};
+	
+	$(".anketElem").show();
+	$(".anketElem").each(function(elem){
+		let outfilter = false;
+		if ( +$(this).attr("data-age") > 60 && filters.age == "no" ){
+			$(this).hide();
+			outfilter = true;
+		};
+		if ( $(this).attr("data-sud") == "True" && filters.sud == "no" ){
+			$(this).hide();
+			outfilter = true;
+		};
+		if ( $(this).attr("data-obr") != filters.obr && filters.obr != "nofilter" ){
+			$(this).hide();
+			outfilter = true;
+		};
+
+		if ( outfilter == false && +$(this).attr("data-score") > optimal.score ){
+			optimal.score = +$(this).attr("data-score");
+			optimal.name = $(this).attr("data-name");
+			optimal.soname = $(this).attr("data-soname");
+		}
+
+	});
+
+	if ( optimal.score == -100) {
+		$(".bastcand").text("");
+	};
+	if ( optimal.score > -100) {
+		$(".bastcand").text("Оптимальный кандидат " + optimal.name + " " + optimal.soname +" количество баллов: " + optimal.score);
+	};	
+};
+
+activateFilters();
+
+$("#filtersud").change(function() {
+    if(this.checked) {
+		filters.sud = "yes";
+    } else {
+		filters.sud = "no";
+	};
+
+	activateFilters();
+});
+
+$("#filterobr").change(function() {
+	filters.obr = $(this).val();
+	activateFilters();
+});
+
+$("#filterage").change(function() {
+	filters.age = $(this).val();
+	activateFilters();
+});
+
+
+
+
+</script>
+</body>
+</html>
