@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <div class="menu">
+        <a href="/statistic/">Добавить анкету</a>
+        <a href="/ankets/">Посмотреть анкеты</a>  
+        <a href="/stat/">Посмотреть статистику</a>
+    </div>
+
+    <h1>Добавить анкету</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <div class="buttons">
+            <div class="butOtm butt" onclick="otmena()">Отменить</div>
+            <button type="submit" class="btn-default butt">Отправить</button>
+        </div>
+    </form>
+{% endblock %}
+<style>
+h1{
+    text-align: center;
+}
+.post-form{
+    margin: 0 auto;
+    max-width: 500px;
+}
+.menu{
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    position: relative;
+}
+.menu a{
+    text-decoration: none;
+    color: black;
+}
+.menu a:nth-child(1){
+    background-color: #d4b7ef;
+}
+.menu a:nth-child(2){
+    background-color: #eef3ae;
+}
+.menu a:nth-child(3){
+    background-color: #659bec;
+}
+.butt{
+    flex: 0 0 200px;
+    background-color: aliceblue;
+    font-size: 20px;
+    cursor: pointer;
+}
+.buttons{
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-between;
+    font-family: auto;
+}
+.butOtm{
+    cursor: pointer;
+    border: 2px solid black;
+    text-align: center;
+    background-color: rgb(255, 159, 164);
+}
+.errorlist{
+    color: red;
+}
+</style>
+<script>
+    function otmena(){
+        window.location.href = '/statistic/';
+    }
+</script>
+</body>
+</html>
