@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.js" integrity="sha512-XcsV/45eM/syxTudkE8AoKK1OfxTrlFpOltc9NmHXh3HF+0ZA917G9iG6Fm7B6AzP+UeEzV8pLwnbRNPxdUpfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+</head>
+<body>
+    {% block content %}
+    <div class="menu">
+        <a href="/statistic/">Добавить анкету</a>
+        <a href="/ankets/">Посмотреть анкеты</a>  
+        <a href="/stat/">Посмотреть статистику</a>
+    </div>
+
+    <div class="ankets">
+		<canvas class="chart"></canvas>
+    </div>
+{% endblock %}
+
+
+<style>
+
+.deleteall {
+    max-width: 1000px;
+    display: flex;
+    margin: 0 auto;
+    position: relative;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-top: 20px;
+    color: red;
+    cursor: pointer;
+}
+
+.bastcand{
+    max-width: 1000px;
+    display: flex;
+    margin: 0 auto;
+    position: relative;
+    justify-content: space-between;
+	font-weight: bold;
+	margin-top: 20px;	
+	color: green;
+}
+
+.filtrs {
+    max-width: 1000px;
+    display: flex;
+    margin: 0 auto;
+    position: relative;
+    justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.filters-item{
+	display: flex;
+    align-items: center;
+	gap:10px;
+}
+
+
+h1{
+    text-align: center;
+}
+.post-form{
+    margin: 0 auto;
+    max-width: 500px;
+}
+.menu{
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    position: relative;
+}
+.menu a{
+    text-decoration: none;
+    color: black;
+}
+.menu a:nth-child(1){
+    background-color: #d4b7ef;
+}
+.menu a:nth-child(2){
+    background-color: #eef3ae;
+}
+.menu a:nth-child(3){
+    background-color: #659bec;
+}
+.ankets{
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    position: relative;
+}
+.headAnkets{
+    display: flex;
+}
+.elemHeadAnkets{
+    flex: 0 0 75px;
+    text-align: center;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+.itemAnketaElem{
+    flex: 0 0 79px; 
+    box-sizing: border-box;
+	overflow: hidden;
+}
+.anketElem {
+    display: flex;
+    justify-content: left;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.pencil{
+    position: absolute;
+    right: -62px;
+    cursor: pointer;
+}
+.trash{
+    position: absolute;
+    right: -97px;
+    cursor: pointer;
+}
+.ok{
+    position: absolute;
+    right: -59px;
+    display: none;
+	cursor: pointer;
+}
+
+input[type="text"] {
+	padding: 0;
+    box-sizing: border-box;
+}
+
+</style>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+
+var masLabel = [];
+var masScore = [];
+
+{% for elem in anketaFields %} 
+masLabel.push("{{ elem.sename }} {{ elem.name }} {{ elem.surname }}");
+{% endfor %}
+
+{% for elem in anketaFields %} 
+masScore.push( {{ elem.kollball }} );
+{% endfor %}
+
+
+new Chart(
+  document.querySelector('.chart'),
+  {
+	type: 'bar', // изменили тип графика
+	data: {
+	  labels: masLabel,
+	  datasets: [
+		{
+			label: 'Баллы кандидата',
+			data: masScore,
+			borderColor: 'green',
+			backgroundColor: 'green',
+			borderWidth: 2
+		}
+	  ]
+	},
+	options: {}
+  }
+);
+
+})
+
+
+
+</script>
+</body>
+</html>
